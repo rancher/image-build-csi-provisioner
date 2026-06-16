@@ -34,4 +34,4 @@ release tags.
 - **Build**: builds every image and runs a [Trivy](https://github.com/aquasecurity/trivy) scan
   (`CRITICAL,HIGH`) on each on every PR/push.
 - **Release**: on a published GitHub release, builds multi-arch images and pushes them to
-  `ghcr.io/rancher`.
+  the Rancher Prime registry (`<prime-registry>/rancher/hardened-*`).
