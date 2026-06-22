@@ -2,7 +2,7 @@
 
 This repo builds hardened, statically-linked Go binaries from
 [kubernetes-csi/external-provisioner](https://github.com/kubernetes-csi/external-provisioner) and packages them in a minimal
-SLE BCI ([bci-nano](registry.suse.com/bci/bci-nano)) based image.
+SLE BCI ([bci-nano](https://registry.suse.com/repositories/bci-bci-nano-16-0)) based image.
 
 Binaries are compiled against [`rancher/hardened-build-base`](https://github.com/rancher/image-build-base),
 which provides the latest supported Go toolchain (FIPS/BoringCrypto-enabled on amd64).
