@@ -48,12 +48,6 @@ push-image-csi-provisioner:
 		--push \
 		.
 
-.PHONY: build-image-all
-build-image-all: build-image-csi-provisioner
-
-.PHONY: push-image-all
-push-image-all: push-image-csi-provisioner
-
 .PHONY: image-scan
 image-scan:
 	trivy image --severity $(SEVERITIES) --no-progress --ignore-unfixed $(REPO)/hardened-csi-provisioner:$(TAG)
