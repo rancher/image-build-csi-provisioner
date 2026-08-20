@@ -33,6 +33,5 @@ RUN if [ "$(xx-info arch)" = "amd64" ]; then \
 # CSI Provisioner Sidecar
 FROM ${BCI_IMAGE} AS csi-provisioner
 LABEL org.opencontainers.image.description="CSI Provisioner Sidecar"
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=builder /usr/local/bin/csi-provisioner /csi-provisioner
 ENTRYPOINT ["/csi-provisioner"]
