@@ -11,7 +11,7 @@ RUN apk add --no-cache file make git clang lld
 ARG TARGETPLATFORM
 RUN set -x && xx-apk --no-cache add musl-dev gcc lld
 
-ARG PKG
+ARG PKG=github.com/kubernetes-csi/external-provisioner
 ARG TAG
 RUN git clone --depth=1 https://${PKG}.git $GOPATH/src/${PKG}
 WORKDIR $GOPATH/src/${PKG}
