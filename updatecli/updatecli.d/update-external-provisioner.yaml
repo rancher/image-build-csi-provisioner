@@ -2,12 +2,12 @@
 name: "Update external-provisioner version"
 
 sources:
-  upstream:
-    name: Get external-provisioner version
+  vsphere-csi-driver:
+    name: Get latest vsphere-csi-driver version
     kind: githubrelease
     spec:
-      owner: kubernetes-csi
-      repository: external-provisioner
+      owner: kubernetes-sigs
+      repository: vsphere-csi-driver
       token: '{{ requiredEnv .github.token }}'
       typefilter:
         release: true
@@ -16,16 +16,25 @@ sources:
       versionfilter:
         kind: semver
 
-targets:
-  makefile:
-    name: "Bump to latest external-provisioner version in Makefile"
+  external-provisioner:
+    name: Get external-provisioner version from vsphere-csi-driver manifest
     kind: file
+    spec:
+      file: 'https://raw.githubusercontent.com/kubernetes-sigs/vsphere-csi-driver/{{ source "vsphere-csi-driver" }}/manifests/vanilla/vsphere-csi-driver.yaml'
+      matchpattern: 'registry\.k8s\.io/sig-storage/csi-provisioner:(v[0-9]+\.[0-9]+\.[0-9]+)'
+      replacepattern: '$1'
+
+targets:
+  tagfile:
+    name: "Bump to external-provisioner version used by vsphere-csi-driver in TAG"
+    kind: file
+    sourceid: external-provisioner
     scmid: default
     disablesourceinput: true
     spec:
-      file: Makefile
-      matchpattern: '(?m)^TAG \:\= (.*)'
-      replacepattern: 'TAG := {{ source "upstream" }}$$(BUILD_META)'
+      file: TAG
+      matchpattern: '(?m)^(.+)$'
+      replacepattern: '{{ source "external-provisioner" }}'
 
 scms:
   default:
@@ -41,8 +50,11 @@ scms:
 
 actions:
   default:
-    title: 'Bump external-provisioner version to {{ source "upstream" }}'
+    title: 'Bump external-provisioner version to {{ source "external-provisioner" }}'
     kind: github/pullrequest
     spec:
-      automerge: false
+      merge:
+        strategy: auto
+      labels:
+        - updatecli
     scmid: default

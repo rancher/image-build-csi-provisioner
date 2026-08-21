@@ -12,12 +12,11 @@ ifndef TARGET_PLATFORMS
 endif
 
 REPO ?= ghcr.io/rancher
-PKG ?= github.com/kubernetes-csi/external-provisioner
 BUILD_META=-build$(shell date +%Y%m%d)
 TAG ?= ${GITHUB_ACTION_TAG}
 
 ifeq ($(TAG),)
-TAG := v6.3.0$(BUILD_META)
+TAG := $(shell cat TAG)$(BUILD_META)
 endif
 
 ifeq (,$(filter %$(BUILD_META),$(TAG)))
@@ -29,7 +28,6 @@ build-image-csi-provisioner: IMAGE = $(REPO)/hardened-csi-provisioner:$(TAG)
 build-image-csi-provisioner:
 	docker buildx build \
 		--platform=$(TARGET_PLATFORMS) \
-		--build-arg PKG=$(PKG) \
 		--build-arg TAG=$(TAG:$(BUILD_META)=) \
 		--target csi-provisioner \
 		--tag $(IMAGE) \
@@ -44,18 +42,11 @@ push-image-csi-provisioner:
 		--sbom=true \
 		--attest type=provenance,mode=max \
 		--platform=$(TARGET_PLATFORMS) \
-		--build-arg PKG=$(PKG) \
 		--build-arg TAG=$(TAG:$(BUILD_META)=) \
 		--target csi-provisioner \
 		--tag $(IMAGE) \
 		--push \
 		.
-
-.PHONY: build-image-all
-build-image-all: build-image-csi-provisioner
-
-.PHONY: push-image-all
-push-image-all: push-image-csi-provisioner
 
 .PHONY: image-scan
 image-scan:
@@ -65,7 +56,6 @@ image-scan:
 log:
 	@echo "TARGET_PLATFORMS=$(TARGET_PLATFORMS)"
 	@echo "REPO=$(REPO)"
-	@echo "PKG=$(PKG)"
 	@echo "TAG=$(TAG:$(BUILD_META)=)"
 	@echo "BUILD_META=$(BUILD_META)"
 	@echo "UNAME_M=$(UNAME_M)"

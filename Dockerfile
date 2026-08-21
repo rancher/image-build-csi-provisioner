@@ -11,7 +11,7 @@ RUN apk add --no-cache file make git clang lld
 ARG TARGETPLATFORM
 RUN set -x && xx-apk --no-cache add musl-dev gcc lld
 
-ARG PKG
+ARG PKG=github.com/kubernetes-csi/external-provisioner
 ARG TAG
 RUN git clone --depth=1 https://${PKG}.git $GOPATH/src/${PKG}
 WORKDIR $GOPATH/src/${PKG}
@@ -33,6 +33,5 @@ RUN if [ "$(xx-info arch)" = "amd64" ]; then \
 # CSI Provisioner Sidecar
 FROM ${BCI_IMAGE} AS csi-provisioner
 LABEL org.opencontainers.image.description="CSI Provisioner Sidecar"
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=builder /usr/local/bin/csi-provisioner /csi-provisioner
 ENTRYPOINT ["/csi-provisioner"]
