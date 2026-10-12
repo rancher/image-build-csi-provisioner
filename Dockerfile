@@ -1,4 +1,4 @@
-ARG GO_IMAGE=rancher/hardened-build-base:v1.26.9b1
+ARG GO_IMAGE=rancher/hardened-build-base:v1.26.9b2
 ARG BCI_IMAGE=registry.suse.com/bci/bci-nano:16.0
 
 # Image that provides cross compilation tooling.
@@ -18,8 +18,7 @@ WORKDIR $GOPATH/src/${PKG}
 RUN git fetch --all --tags --prune
 RUN git checkout tags/${TAG} -b ${TAG}
 COPY go-mod-overrides ./go-mod-overrides
-RUN go-mod-overrides.sh ./go-mod-overrides
-RUN go mod download
+RUN go-mod-replacer -local ./go-mod-overrides
 
 # cross-compilation setup
 ARG TARGETARCH
