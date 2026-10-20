@@ -28,7 +28,6 @@ targets:
   tagfile:
     name: "Bump to external-provisioner version used by vsphere-csi-driver in TAG"
     kind: file
-    sourceid: external-provisioner
     scmid: default
     disablesourceinput: true
     spec:
