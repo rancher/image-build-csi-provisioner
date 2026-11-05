@@ -21,7 +21,7 @@ jobs:
 
     - name: Read secrets
       if: github.repository_owner == 'rancher'
-      uses: rancher-eio/read-vault-secrets@dfae8acd43a9e170fca5f90168da22f814fe4e9a # main
+      uses: rancher-eio/read-vault-secrets@4c8f4e741954651c502bb7739c46ae1bad26b44d # main
       with:
         secrets: |
           secret/data/github/repo/${{ github.repository }}/rancher-prime-registry/credentials registry | PRIME_REGISTRY ;
@@ -32,7 +32,7 @@ jobs:
           secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials password | STAGING_REGISTRY_PASSWORD ;
 
     - name: Build and push multi-arch hardened-csi-provisioner image to Prime
-      uses: rancher/ecm-distro-tools/actions/publish-image@086cd2f90ed82712e45701441a00e59b95b578c1 # v0.77.1
+      uses: rancher/ecm-distro-tools/actions/publish-image@ee852bce72b895986f953b67d03430130dfae62d # v0.78.2
       with:
         image: hardened-csi-provisioner
         make-target: push-image-csi-provisioner
@@ -46,7 +46,7 @@ jobs:
         prime-password: ${{ env.PRIME_REGISTRY_PASSWORD }}
 
     - name: Build and push multi-arch hardened-csi-provisioner image to Staging
-      uses: rancher/ecm-distro-tools/actions/publish-image@086cd2f90ed82712e45701441a00e59b95b578c1 # v0.77.1
+      uses: rancher/ecm-distro-tools/actions/publish-image@ee852bce72b895986f953b67d03430130dfae62d # v0.78.2
       with:
         image: hardened-csi-provisioner
         make-target: push-image-csi-provisioner
